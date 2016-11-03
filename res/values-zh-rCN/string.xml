@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bob播放器</string>
+    <string name="text_hours" formatted="false">%d小时%02d分%02d秒</string>
+    <string name="text_mins" formatted="false">%d分%02d秒</string>
+    <string name="text_secs" formatted="false">%d秒</string>
+    <string name="text_hours_with_comment" formatted="false">%02d:%02d:%02d</string>
+    <string name="text_mins_with_comment" formatted="false">00:%02d:%02d</string>
+    <string name="text_secs_with_comment" formatted="false">00:00:%02d</string>
+    <string name="loading_text">正在扫描，请稍候...</string>
+    <string name="video_thumb_description">video thumb image</string>
+    <string name="action_scanning">扫描</string>
+    <string name="action_delete">删除</string>
+    <string name="action_mode_label">label</string>
+    <string name="select_label">选择</string>
+    <string name="label_text">%s项目已选择</string>
+    <string name="selectd_all">选择全部</string>
+    <string name="selectd_none">取消选择</string>
+    <string name="full_screen_description">full_screen</string>
+    <string name="huazhonghua_description">huahzonghua_description</string>
+    <string name="video_list_description">videolist_description</string>
+    <string name="default_start_time">00:00:00</string>
+    <string name="list_update_finished">列表更新完成</string>
+    <string name="no_media_store">请插入存储卡</string>
+    <string name="no_video_file">没有找到视频文件，请检查存储卡</string>
+    <string name="no_media_default">no media</string>
+    <string name="dialog_notice_message">行车中禁用视频播放，请到视频设置界面更改</string>
+    <string name="dialog_confirm_button">设置</string>
+    <string name="dialog_cancel_button">取消</string>
+    <string name="notice_title">提醒</string>
+    <string name="do_not_support_this_fromat_video">不支持当前格式视频播放</string>
+    <string name="do_rm_sdcard">设备已移除</string>
+    <string name="add_filter_video_successful">列表更新完成</string>
+    <string name="video_list_no_update">列表无更新</string>
+    <array name="cab_labels">
+        <item>全部选择</item>
+        <item>取消选择</item>
+    </array>
+</resources>

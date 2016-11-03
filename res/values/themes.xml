@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- the theme applied to the application or activity 
+           parent="android:style/Theme.Holo.Light.DarkActionBar"-->
+    <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    </style>
+
+    <style name="MyActionModeStyle" parent="CustomActionBarTheme">
+        <item name="android:actionModeBackground">@drawable/title_bk</item>
+        <item name="android:actionBarDivider">@drawable/action_mode_line</item>
+        <item name="android:actionModeCloseDrawable">@drawable/check</item>
+    </style>
+    
+    <!-- parent="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" -->
+    <style name="ViedoPlayerStyle" >
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@null</item>
+    </style>
+</resources>

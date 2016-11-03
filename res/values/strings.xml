@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VideoPlayer</string>
+    <string name="text_hours" formatted="false">%dhours%02dmins%02dsecs</string>
+    <string name="text_mins" formatted="false">%dmins%02dsecs</string>
+    <string name="text_secs" formatted="false">%dsecs</string>
+    <string name="text_hours_with_comment" formatted="false">%02d:%02d:%02d</string>
+    <string name="text_mins_with_comment" formatted="false">00:%02d:%02d</string>
+    <string name="text_secs_with_comment" formatted="false">00:00:%02d</string>
+    <string name="loading_text">Loading, please wait...</string>
+    <string name="video_thumb_description">video thumb image</string>
+    <string name="action_scanning">Loading</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_mode_label">label</string>
+    <string name="select_label">Select</string>
+    <string name="label_text">%sSelected items</string>
+    <string name="selectd_all">Select all</string>
+    <string name="selectd_none">Cancel selection</string>
+    <string name="full_screen_description">full_screen</string>
+    <string name="huazhonghua_description">huahzonghua_description</string>
+    <string name="video_list_description">videolist_description</string>
+    <string name="default_start_time">00:00:00</string>
+    <string name="list_update_finished">List update is done.</string>
+    <string name="no_media_store">Please insert the storage card.</string>
+    <string name="no_video_file">Video files not found, please check the storage card.</string>
+    <string name="no_media_default">no media</string>
+    <string name="dialog_notice_message">Video playback is set to be not allowed while driving. Please change settings.</string>
+    <string name="dialog_confirm_button">Setting</string>
+    <string name="dialog_cancel_button">Cancel</string>
+    <string name="notice_title">Alert</string>
+    <string name="do_not_support_this_fromat_video">Video format not supported.</string>
+    <string name="do_rm_sdcard">storage device has gone</string>
+    <string name="add_filter_video_successful">List update is done.</string>
+    <string name="video_list_no_update">List no update.</string>
+    <array name="cab_labels">
+        <item>Select all</item>
+        <item>Cancel selection</item>
+    </array>
+</resources>

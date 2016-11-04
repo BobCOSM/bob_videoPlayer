@@ -14,6 +14,9 @@
     <string name="action_mode_label">label</string>
     <string name="select_label">Select</string>
     <string name="label_text">%sSelected items</string>
+    <string name="reload_no_change_toast_text">no changes</string>
+    <string name="reload_add_toast_text">add %d videos</string>
+    <string name="reload_remove_toast_text">remove %d videos</string>
     <string name="selectd_all">Select all</string>
     <string name="selectd_none">Cancel selection</string>
     <string name="full_screen_description">full_screen</string>

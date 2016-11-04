@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class VideoListActivity extends Activity {	
 	private static final String TAG = "VideoListActivity";
@@ -40,6 +41,7 @@ public class VideoListActivity extends Activity {
 	public static final int LOAD_FINISHED = 0x01;
 	public static final int SCAN_STARTED = 0x02;
 	public static final int SCAN_FINISHED = 0x03;
+	public static final int RELOAD_FINISHED = 0x04;
 	
 	public static boolean canLoad = false;
 	
@@ -51,8 +53,10 @@ public class VideoListActivity extends Activity {
 	
 	private VideoListAdapter mVideoListAdapter = null;
 	private DeleteMenuSpinnerAdapter spinnerAdapter = null;
-	
 	private ActionMode mActionMode = null;
+
+	private int mLastPlayListSize = 0;
+	private boolean isReload = false;
 	
 	private Handler mHandler = new Handler(){
 		@Override
@@ -76,6 +80,19 @@ public class VideoListActivity extends Activity {
 				showOption();
 				mVideoListAdapter.notifyDataSetChanged();
 				VideoListActivity.canLoad = false;
+				if(isReload){
+					isReload = false;
+					int curPlayListSize = mVideoController.getPlayListSize();
+					String toastText = "";
+					if(mLastPlayListSize == curPlayListSize){
+						toastText = getString(R.string.reload_no_change_toast_text);
+					} else if(mLastPlayListSize > curPlayListSize){
+						toastText = String.format(getString(R.string.reload_remove_toast_text), curPlayListSize - mLastPlayListSize);
+					} else {
+						toastText = String.format(getString(R.string.reload_add_toast_text), curPlayListSize - mLastPlayListSize);
+					}
+					Toast.makeText(VideoListActivity.this, toastText, Toast.LENGTH_SHORT).show();
+				}
 				break;
 			}
 			Log.d(TAG, "maxd ---- ++----- video list count: " + mVideoController.getPlayListSize());
@@ -113,7 +130,8 @@ public class VideoListActivity extends Activity {
 			mActionMode = this.startActionMode(mActionModeCallback);
 			break;
 		case R.id.action_scanning:
-			
+			isReload = true;
+			mVideoController.reloadVideoList();
 			break;
 		default:
 			break;
@@ -176,6 +194,7 @@ public class VideoListActivity extends Activity {
 				if(mVideoController.isDeleteMode()){
 					mVideoController.selectVideo(mVideoListAdapter.getItem(position));
 					mVideoListAdapter.notifyDataSetChanged();
+					spinnerAdapter.notifyDataSetChanged();
 				}else{
 					String videoPath = mVideoListAdapter.getItemPath(position);
 					Log.d(TAG,"videoPath :" + videoPath);
@@ -200,6 +219,7 @@ public class VideoListActivity extends Activity {
 			mVideoController.setDeleteMode(false);
 			mVideoController.removeFilteListFromPlayList();
 			mVideoListView.setAdapter(mVideoListAdapter);
+			mLastPlayListSize = mVideoController.getPlayListSize();
 		}
 		
 		@Override

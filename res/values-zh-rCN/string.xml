@@ -14,6 +14,9 @@
     <string name="action_mode_label">label</string>
     <string name="select_label">选择</string>
     <string name="label_text">%s项目已选择</string>
+    <string name="reload_no_change_toast_text">列表无更新</string>
+    <string name="reload_add_toast_text">增加了 %d 个视频文件</string>
+    <string name="reload_remove_toast_text">减少了 %d 个视频文件</string>
     <string name="selectd_all">选择全部</string>
     <string name="selectd_none">取消选择</string>
     <string name="full_screen_description">full_screen</string>

@@ -45,19 +45,19 @@ public class PlayList {
 	}
 	
 	//加入列表 返回 true 未加入列表返回false
-	public boolean addVideo(ArrayList<VideoInfo> fliterList,VideoInfo videoInfo){
+	public boolean addVideo(ArrayList<String> fliterList,VideoInfo videoInfo){
 		if(fliterList != null){
-			if(fliterList.contains(videoInfo)){	//过滤列表中存在要加入的视频
-				Log.d(TAG,TAG+" maxd====++++ in fliterlist");
+			if(fliterList.contains(videoInfo.path)){	//过滤列表中存在要加入的视频
+//				Log.d(TAG,TAG+" maxd====++++ in fliterlist");
 				return false;
 			}
 		}
 		if( !videos.contains(videoInfo) ){
 			videos.add(videoInfo);
-			Log.d(TAG,TAG+" maxd====++++ success");
+//			Log.d(TAG,TAG+" maxd====++++ success");
 			return true;
 		}
-		Log.d(TAG,TAG+" maxd====++++ already in playlist");
+//		Log.d(TAG,TAG+" maxd====++++ already in playlist");
 		return false;
 	}
 }

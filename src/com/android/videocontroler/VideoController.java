@@ -1,17 +1,25 @@
 package com.android.videocontroler;
 
+import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.android.model.PlayList;
 import com.android.model.VideoInfo;
 import com.android.model.VideoListAdapter;
 import com.android.util.ExternalStorageReceiver;
+import com.android.videoplayer.PlayerApplication;
 import com.android.videoplayer.VideoListActivity;
 import com.android.videoplayer.VideoPlayActivity;
 
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -22,16 +30,19 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 public class VideoController {
+
+	private static final String TAG = "VideoPlayer VideoController";
 	
 	public static final String PLAY_VIDEO_PATH = "play_video_path";
-	private static final String TAG = "VideoPlayer VideoController";
+	
+	public static final String FILTE_VIDEO_LIST = "filte_video_list"; 
+	
 	private static VideoController instance = null;
 	private Context mAppContext = null;
 	private Handler mListHandler = null;
 	private ArrayList<VideoInfo> mDeleteFilteList = new ArrayList<VideoInfo>();
 	
 	private PlayList mPlayList = null;
-	
 	private boolean isLoading = false;
 	
 	private Handler mHandler = new Handler(){
@@ -101,16 +112,64 @@ public class VideoController {
 		return mDeleteFilteList.size();
 	}
 	
-	public ArrayList<VideoInfo> getFilteList(){
-		return null;
-	}
 	
 	public void clearDeleteFilteList(){
 		mDeleteFilteList.clear();
 	}
+
+	private ArrayList<String> getFilteList(){
+		ArrayList<String> filteList = new ArrayList<String>();
+		SharedPreferences sharePref = mAppContext.getSharedPreferences(
+				PlayerApplication.SHARE_PREF_NAME, Context.MODE_PRIVATE);
+		String jsonStr = sharePref.getString(FILTE_VIDEO_LIST, null);
+		if(jsonStr != null){
+			try {
+				JSONArray jsonArray = new JSONArray(jsonStr);
+				for(int i = 0; i<jsonArray.length(); i++){
+					String filtePath = jsonArray.optString(i);
+					Log.d(TAG,"filtePath : " + filtePath); 
+					filteList.add(filtePath);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return filteList;
+	}
+	
+	private void saveShareFilteList(ArrayList<String> filteList){
+		SharedPreferences sharePref = mAppContext.getSharedPreferences(
+				PlayerApplication.SHARE_PREF_NAME, Context.MODE_PRIVATE);
+		JSONArray jsonArray = new JSONArray();
+		for(String filteStr : filteList){
+			jsonArray.put(filteStr);
+		}
+		
+		if(jsonArray.length() > 0){
+			Editor editor = sharePref.edit();
+			editor.putString(FILTE_VIDEO_LIST, jsonArray.toString());
+			editor.commit();
+		}
+	}
+	
+	private void removeShareFilteList(){
+		SharedPreferences sharePref = mAppContext.getSharedPreferences(
+				PlayerApplication.SHARE_PREF_NAME, Context.MODE_PRIVATE);
+		Editor editor = sharePref.edit();
+		editor.remove(FILTE_VIDEO_LIST);
+		editor.commit();
+	}
 	
 	private void saveDeleteFliterList(){
 		//存储在sharePreference里
+		ArrayList<String> filteList = getFilteList();
+		for(VideoInfo videoInfo : mDeleteFilteList){
+			if(!filteList.contains(videoInfo.path)){
+				filteList.add(videoInfo.path);
+			}
+		}
+		saveShareFilteList(filteList);
 	}
 	
 	public void removeFilteListFromPlayList(){
@@ -120,7 +179,7 @@ public class VideoController {
 	
 	public ArrayList<VideoInfo> getPlayListVideos(){
 		return mPlayList.getPlayListVideos();
-	}
+	} 
 	
 	public void clearList(){
 		mPlayList.clearList();
@@ -176,6 +235,11 @@ public class VideoController {
 		}
 	}
 	
+	public void reloadVideoList(){
+		removeShareFilteList();
+		loadVideoList();
+	}
+	
 	public void startPlayVideoByPath(Context context,String videoPath){
 		Intent intent = new Intent(context,VideoPlayActivity.class);
 		intent.putExtra(PLAY_VIDEO_PATH, videoPath);
@@ -217,14 +281,14 @@ public class VideoController {
             };
     }
 
-	private boolean addVideoInfoToPlayList(VideoInfo videoInfo,ArrayList<VideoInfo> filteList){
-		Log.d(TAG,"video path: " + videoInfo.path);
+	private boolean addVideoInfoToPlayList(VideoInfo videoInfo,ArrayList<String> filteList){
+//		Log.d(TAG,"video path: " + videoInfo.path);
 		return mPlayList.addVideo(filteList, videoInfo);
 	}
 	
 	private void loadVideos(){
 		//加载音频文件
-		ArrayList<VideoInfo> filteList = getFilteList();
+		ArrayList<String> filteList = getFilteList();
 		Cursor curVideo = getVideoCursor();
 		if(curVideo != null && curVideo.moveToFirst()){
 			Log.d(TAG,"start load video");

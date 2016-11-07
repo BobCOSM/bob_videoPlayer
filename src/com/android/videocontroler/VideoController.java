@@ -247,6 +247,13 @@ public class VideoController {
 		mAppContext.startActivity(intent);
 	}
 	
+	public boolean setPlayState(int position){
+		return mPlayList.setPlayState(position);
+	}
+	public boolean setPlayState(String videoPath){
+		return mPlayList.setPlayState(videoPath);
+	}
+	
 	private VideoInfo createVideoInfo(Cursor cursor){
 		VideoInfo video = new VideoInfo(mAppContext);
 		int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.Media._ID));

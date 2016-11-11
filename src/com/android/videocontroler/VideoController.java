@@ -247,6 +247,10 @@ public class VideoController {
 		mAppContext.startActivity(intent);
 	}
 	
+	public String playVideoPath(Intent intent){
+		return intent.getStringExtra(PLAY_VIDEO_PATH);
+	}
+	
 	public boolean setPlayState(int position){
 		return mPlayList.setPlayState(position);
 	}

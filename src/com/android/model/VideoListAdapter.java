@@ -6,7 +6,13 @@ import java.util.zip.Inflater;
 import com.android.videoplayer.R;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +75,12 @@ public class VideoListAdapter extends BaseAdapter {
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 		
+		
 		VideoInfo videoInfo = mVideoList.get(position);
+		Bitmap videoThumb = ThumbnailUtils.createVideoThumbnail(videoInfo.path, Images.Thumbnails.MICRO_KIND);
+		
+		viewHolder.videoThumb.setImageBitmap(videoThumb);
+		
 		viewHolder.videoTitle.setText(videoInfo.title);
 		
 		viewHolder.videoCheck.setImageResource( 

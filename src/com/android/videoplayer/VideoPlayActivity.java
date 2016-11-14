@@ -141,8 +141,7 @@ public class VideoPlayActivity extends Activity {
 			mSurfaceHolder = mSurfaceView.getHolder();
 			mMediaPlayer.setDataSource(videoPath);
 			mMediaPlayer.setDisplay(mSurfaceHolder);
-		} catch (IllegalArgumentException | SecurityException
-				| IllegalStateException | IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

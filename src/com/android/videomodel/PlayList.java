@@ -1,4 +1,4 @@
-package com.android.model;
+package com.android.videomodel;
 
 import java.util.ArrayList;
 

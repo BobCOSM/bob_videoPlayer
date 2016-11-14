@@ -1,18 +1,13 @@
-package com.android.model;
+package com.android.videomodel;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.android.util.BitmapLoader;
 import com.android.videoplayer.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +21,25 @@ public class VideoListAdapter extends BaseAdapter {
 	private ArrayList<VideoInfo> mVideoList = null;
 	private LayoutInflater mInflater = null;
 	private Context mAppContext = null;
+	private BitmapLoader mLoader = null;
 	public VideoListAdapter(Context appContext,ArrayList<VideoInfo> videoList){
 		mAppContext = appContext;
 		mInflater = (LayoutInflater)appContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mVideoList = videoList;
 		Log.d("VideoListAdapter","maxd-----------VideoListAdapter ==== "+this.toString());
+	
+		mLoader = new BitmapLoader(appContext, new BitmapLoader.LoaderListener() {
+			
+			@Override
+			public void onLoadFinish(Bitmap bitmap, String uri) {
+				ImageView imageView;
+				View mListView = null;
+				imageView = (ImageView) mListView.findViewWithTag(uri);
+				if (imageView != null && bitmap != null) {
+					imageView.setImageBitmap(bitmap);
+				}
+			}
+		});
 	}
 	
 	@Override
@@ -60,6 +69,7 @@ public class VideoListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		ViewHolder viewHolder;
+		VideoInfo videoInfo = mVideoList.get(position);
 		if(convertView == null){
 			viewHolder = new ViewHolder();
 			convertView = mInflater.inflate(R.layout.video_list_cell, null);
@@ -74,24 +84,18 @@ public class VideoListAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
-		
-		
-		VideoInfo videoInfo = mVideoList.get(position);
-		Bitmap videoThumb = ThumbnailUtils.createVideoThumbnail(videoInfo.path, Images.Thumbnails.MICRO_KIND);
-		
-		viewHolder.videoThumb.setImageBitmap(videoThumb);
-		
+
+//		viewHolder.videoThumb.setImageBitmap(videoInfo.getThumbImage());
 		viewHolder.videoTitle.setText(videoInfo.title);
-		
 		viewHolder.videoCheck.setImageResource( 
 				videoInfo.isChecked() ? R.drawable.check_box_checked : R.drawable.check_box_normal);
-		
 		convertView.setBackgroundColor(mAppContext.getResources().getColor(
 				videoInfo.isSelected ? R.color.video_list_cell_sel_bg : R.color.video_list_cell_nor_bg));
 		return convertView;
 	}
 	
 	class ViewHolder{
+		Bitmap videoThumbBitMap = null;
 		ImageView videoThumb = null;
 		TextView videoTitle = null;
 		ImageView videoCheck = null;

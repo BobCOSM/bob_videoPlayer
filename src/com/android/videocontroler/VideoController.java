@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.android.model.PlayList;
-import com.android.model.VideoInfo;
-import com.android.model.VideoListAdapter;
 import com.android.util.ExternalStorageReceiver;
+import com.android.videomodel.PlayList;
+import com.android.videomodel.VideoInfo;
+import com.android.videomodel.VideoListAdapter;
 import com.android.videoplayer.PlayerApplication;
 import com.android.videoplayer.VideoListActivity;
 import com.android.videoplayer.VideoPlayActivity;
@@ -267,7 +267,11 @@ public class VideoController {
         video.id = id;
         video.path = path;
         video.title = title;
-        video.setDuration(duration);
+        if(duration != null){
+            video.setDuration(duration);	
+        }else{
+        	Log.d(TAG,"duration is null path : " + path);
+        }
 		return video;
 	}
 
@@ -306,6 +310,13 @@ public class VideoController {
 			do{
 				VideoInfo videoInfo = createVideoInfo(curVideo);
 				addVideoInfoToPlayList(videoInfo,filteList);
+//				sendMessageToListActivity(VideoListActivity.LIST_NEED_NOTIFY);
+//				try {
+//					Thread.sleep(200);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}while(curVideo.moveToNext());
 		}
 		isLoading = false;

@@ -13,11 +13,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 
 public class ExternalStorageUtil {
 	
 	public final static int MOUNTED = 1;
 	public final static int UNMOUNTED = 2;
+	private static final String TAG = "ExternalStrorageUtil ";
 	public static int getSDExterState() {
 		return SDExterState;
 	}
@@ -55,6 +57,7 @@ public class ExternalStorageUtil {
 		String sdPath = getSDExterPath();
 		if(sdPath != null){
 			sdStatus = Environment.getStorageState(new File(sdPath));
+			Log.d(TAG,"sdStatus : " + sdStatus);
 		}
 //		Log.d("SDCardUtil","sd status : " + sdStatus);
 		return sdStatus;
@@ -65,6 +68,7 @@ public class ExternalStorageUtil {
 		String usbPath = getUSBExterPath();
 		if(usbPath != null){
 			usbStatus = Environment.getStorageState(new File(usbPath));
+			Log.d(TAG,"usbStatus : " + usbStatus);
 		}
 //		Log.d("SDCardUtil","usb status : " + usbStatus);
 		return usbStatus;

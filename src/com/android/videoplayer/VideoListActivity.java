@@ -1,8 +1,8 @@
 package com.android.videoplayer;
 
-import com.android.model.VideoListAdapter;
 import com.android.util.ExternalStorageReceiver;
 import com.android.videocontroler.VideoController;
+import com.android.videomodel.VideoListAdapter;
 import com.android.videoplayer.R;
 import android.app.Activity;
 import android.content.Context;
@@ -42,6 +42,7 @@ public class VideoListActivity extends Activity {
 	public static final int SCAN_STARTED = 0x02;
 	public static final int SCAN_FINISHED = 0x03;
 	public static final int RELOAD_FINISHED = 0x04;
+//	public static final int LIST_NEED_NOTIFY = 0x05;
 	
 	public static boolean canLoad = false;
 	
@@ -94,6 +95,10 @@ public class VideoListActivity extends Activity {
 					Toast.makeText(VideoListActivity.this, toastText, Toast.LENGTH_SHORT).show();
 				}
 				break;
+//			case LIST_NEED_NOTIFY:
+//				hideLoadingProgress();
+//				mVideoListAdapter.notifyDataSetChanged();
+//				break;
 			}
 			Log.d(TAG, "maxd ---- ++----- video list count: " + mVideoController.getPlayListSize());
 		}

@@ -229,7 +229,7 @@ public class VideoController {
 		if(!isLoading && !ExternalStorageReceiver.isScanning(mAppContext)){
 			isLoading = true;
 			new Thread(new LoadVideoThread()).start();
-//			loadVideos();
+//			loadVideos(); 
 		}else{
 			sendMessageToListActivity(VideoListActivity.LOADING_VIDEO_FINISHED);
 		}
@@ -297,7 +297,6 @@ public class VideoController {
     }
 
 	private boolean addVideoInfoToPlayList(VideoInfo videoInfo,ArrayList<String> filteList){
-//		Log.d(TAG,"video path: " + videoInfo.path);
 		return mPlayList.addVideo(filteList, videoInfo);
 	}
 	
@@ -310,13 +309,6 @@ public class VideoController {
 			do{
 				VideoInfo videoInfo = createVideoInfo(curVideo);
 				addVideoInfoToPlayList(videoInfo,filteList);
-//				sendMessageToListActivity(VideoListActivity.LIST_NEED_NOTIFY);
-//				try {
-//					Thread.sleep(200);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 			}while(curVideo.moveToNext());
 		}
 		isLoading = false;

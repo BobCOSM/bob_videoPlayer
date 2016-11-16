@@ -11,6 +11,9 @@ public class PlayList {
 	private static PlayList instance = null;
 	public boolean isEditMode = false;
 	
+	private VideoInfo currentPlayInfo = null;
+	private int currentIndex = 0;
+	
 	public ArrayList<VideoInfo> getPlayListVideos(){
 		return playListVideos;
 	}
@@ -60,24 +63,38 @@ public class PlayList {
 //		Log.d(TAG,TAG+" maxd====++++ already in playlist");
 		return false;
 	}
+	
 	public boolean setPlayState(int position){
 		boolean res = false;
 		VideoInfo videoInfo = null;
 		videoInfo = videos.get(position);
 		if(videoInfo != null){
 			videoInfo.isPlaying = true;
+			currentPlayInfo = videoInfo;
 			res = true;
 		}
 		return res;
 	}
+	
 	public boolean setPlayState(String videoPath){
 		boolean res = false;
 		for(VideoInfo videoInfo : videos){
 			if(videoInfo.path.equals(videoPath)){
 				videoInfo.isPlaying = true;
+				currentPlayInfo = videoInfo;
 				res = true;
 			}
 		}
 		return res;
+	}
+	
+	public VideoInfo getNextVideo(){
+		VideoInfo videoInfo = null;
+		return videoInfo;
+	}
+	
+	public VideoInfo getPrevVideo(){
+		VideoInfo videoInfo = null;
+		return videoInfo;
 	}
 }

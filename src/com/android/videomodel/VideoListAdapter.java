@@ -1,7 +1,6 @@
 package com.android.videomodel;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.android.util.BitmapLoader;
 import com.android.videoplayer.R;

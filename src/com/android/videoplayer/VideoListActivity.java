@@ -94,6 +94,7 @@ public class VideoListActivity extends Activity {
 					}
 					Toast.makeText(VideoListActivity.this, toastText, Toast.LENGTH_SHORT).show();
 				}
+				mLastPlayListSize = mVideoController.getPlayListSize();
 				break;
 //			case LIST_NEED_NOTIFY:
 //				hideLoadingProgress();
@@ -154,7 +155,10 @@ public class VideoListActivity extends Activity {
 //		Log.d(TAG,"maxd------ mVideoListView " + mVideoListView);
 //		Log.d(TAG,"maxd------ mVideoController " + mVideoController);
 //		Log.d(TAG,"maxd------ mVideos :" + mVideoController.getVideos());
-		mVideoController.loadVideoList();
+		Intent intent = getIntent();
+		if(intent == null || !intent.getBooleanExtra(VideoPlayActivity.IS_FROM_PLAY_ACTIVITY, false)){
+			mVideoController.loadVideoList();
+		}
 	}
 	
 	private void setVideoListViewAdapter(){

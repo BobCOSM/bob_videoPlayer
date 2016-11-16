@@ -27,8 +27,8 @@
             android:id="@+id/player_top_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="8dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="8dp"
             android:clickable="true"
             android:onClick="titleIconClicked"
             android:src="@drawable/title_icon" /> 
@@ -37,8 +37,8 @@
             android:id="@+id/video_title_textview"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/player_top_icon"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/player_top_icon"
             android:clickable="true"
             android:ellipsize="end"
             android:gravity="center_vertical"
@@ -65,8 +65,8 @@
             android:id="@+id/video_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/video_list_btn_selector"
             android:contentDescription="@string/video_list_description"
@@ -84,17 +84,17 @@
             android:id="@+id/current_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="8dp" />
+            android:layout_marginLeft="8dp" />
 
         <TextView
             android:id="@+id/total_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginRight="8dp" />
 
         <SeekBar
             android:id="@+id/video_progress"
@@ -117,7 +117,7 @@
                 <ImageButton
                     android:id="@+id/player_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/back_btn_selector"
                     android:onClick="onBack" />
             </LinearLayout>
@@ -130,7 +130,7 @@
                 <ImageButton
                     android:id="@+id/player_last"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/last_btn_selector"
                     android:onClick="onPlayPrevious" />
             </LinearLayout>
@@ -141,9 +141,9 @@
                 android:layout_weight="1"
                 android:gravity="center" >
                 <ImageButton
-                    android:id="@+id/pause_button"
+                    android:id="@+id/play_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/pause_selector"
                     android:onClick="onPlayOrPause" />
@@ -157,7 +157,7 @@
                 <ImageButton
                     android:id="@+id/player_next"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/next_btn_selector"
                     android:onClick="onPlayNext" />
             </LinearLayout>
@@ -167,11 +167,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center" >
-                <Button
+                <ImageButton
                     android:id="@+id/cdHome"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/cd_home_selector" 
                     android:onClick="onHome"/>
             </LinearLayout>

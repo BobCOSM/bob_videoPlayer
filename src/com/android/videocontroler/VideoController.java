@@ -84,7 +84,7 @@ public class VideoController {
 		}
 	}
 	
-	public void selectVideo(Object videoInfo){
+	public void selectVideoToFilteList(Object videoInfo){		// 列表移除视频模式时 选中视频
 		VideoInfo filteVideo = (VideoInfo)videoInfo;
 		if(filteVideo.isChecked()){
 			removeVideoFromFilteList(filteVideo);
@@ -93,7 +93,7 @@ public class VideoController {
 		}
 	}
 	
-	public void addAllVideo(){
+	public void addAllVideotoFilteList(){
 		removeAll();
 		for (VideoInfo filteVideo : mPlayList.getPlayListVideos()) {
 			filteVideo.setChecked(true);
@@ -190,6 +190,11 @@ public class VideoController {
 		return playListSize;
 	}
 	
+	public int getCurrentPosition(){
+		return mPlayList.getCurrentPosition();
+	}
+	
+	
 	private void sendMessageToListActivity(int msg){
 		if(mListHandler != null){
 			Log.d(TAG,"maxd ----======= send msg:" + msg);
@@ -247,15 +252,26 @@ public class VideoController {
 		mAppContext.startActivity(intent);
 	}
 	
-	public String playVideoPath(Intent intent){
-		return intent.getStringExtra(PLAY_VIDEO_PATH);
-	}
+//	public String playVideoPath(Intent intent){
+//		return intent.getStringExtra(PLAY_VIDEO_PATH);
+//	}
 	
 	public boolean setPlayState(int position){
 		return mPlayList.setPlayState(position);
 	}
 	public boolean setPlayState(String videoPath){
 		return mPlayList.setPlayState(videoPath);
+	}
+	
+	public boolean resetLastVideoInfo(){		//重置视频信息
+		return mPlayList.setPlayState(null);
+	}
+	
+	public String getNextVideoPath(){
+		return mPlayList.getNextVideo().path;
+	}
+	public String getPrevVideoPath(){
+		return mPlayList.getPrevVideo().path;
 	}
 	
 	private VideoInfo createVideoInfo(Cursor cursor){

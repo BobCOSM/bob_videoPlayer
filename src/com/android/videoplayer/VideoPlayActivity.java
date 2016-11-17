@@ -204,7 +204,7 @@ public class VideoPlayActivity extends Activity {
 			mIsFromExternalApp = true;
 			playVideo(uri);
 		}else{
-			String playPath = mVideoController.playVideoPath(intent);
+			String playPath = intent.getStringExtra(VideoController.PLAY_VIDEO_PATH);
 			Log.d(TAG,"playPath :" + playPath);
 			mIsFromExternalApp = false;
 			playVideo(playPath);
@@ -212,20 +212,13 @@ public class VideoPlayActivity extends Activity {
 	}
 	
 	private void playVideo(Uri videoUri){
-		Log.d(TAG,"playVideo by uri : " + videoUri.toString());
-		Log.d(TAG,"playVideo by uri getPath : " + videoUri.getPath());
-		Log.d(TAG,"playVideo by uri getLastPathSegment : " + videoUri.getLastPathSegment());
-//		String videoStr = videoUri.getPath();
-//		playVideo(videoStr);
 		initMediaPlayer();
 		try {
 			mSurfaceHolder = mSurfaceView.getHolder();
 			mMediaPlayer.setDataSource(this,videoUri);
 			mMediaPlayer.setDisplay(mSurfaceHolder);
-//			setMediaPlayerListener();
 			mMediaPlayer.prepareAsync();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			mHandler.sendEmptyMessage(SUPPORT_ERROR);
 		}
@@ -239,10 +232,8 @@ public class VideoPlayActivity extends Activity {
 			mSurfaceHolder = mSurfaceView.getHolder();
 			mMediaPlayer.setDataSource(videoPath);
 			mMediaPlayer.setDisplay(mSurfaceHolder);
-//			setMediaPlayerListener();
 			mMediaPlayer.prepareAsync();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			mHandler.sendEmptyMessage(SUPPORT_ERROR);
 		}
@@ -269,16 +260,21 @@ public class VideoPlayActivity extends Activity {
 			mMediaPlayer.stop();
 			mMediaPlayer.release();
 			mMediaPlayer = null;
+			mIsPlaying = false;
 		}
+		mVideoController.resetLastVideoInfo();
 		changePlayBtnBk(mPlayButton);
 	}
 	
 	private void mediaNext(){		//播放下一个
 		mediaStop();
-		playVideo();
+		playVideo(mVideoController.getNextVideoPath());
+		
 	}
 	
 	private void mediaPrevious(){	//播放上一个
+		mediaStop();
+		playVideo(mVideoController.getPrevVideoPath());
 		
 	}
 
@@ -343,11 +339,11 @@ public class VideoPlayActivity extends Activity {
 	}
 	
 	public void onPlayNext(View view){
-		
+		mediaNext();
 	}
 	
 	public void onPlayPrevious(View view){
-		
+		mediaPrevious();
 	}
 	
 	public void videoListButtonClicked(View view){

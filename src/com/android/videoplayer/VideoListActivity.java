@@ -194,6 +194,10 @@ public class VideoListActivity extends Activity {
 	}
 	
 	private void setItemClicked(){
+		int position = mVideoController.getCurrentPosition();
+		if( position >= 0){
+			mVideoListView.setSelection(position);
+		}
 		mVideoListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -201,7 +205,7 @@ public class VideoListActivity extends Activity {
 					int position, long id) {
 				// TODO Auto-generated method stub
 				if(mVideoController.isDeleteMode()){
-					mVideoController.selectVideo(mVideoListAdapter.getItem(position));
+					mVideoController.selectVideoToFilteList(mVideoListAdapter.getItem(position));
 					mVideoListAdapter.notifyDataSetChanged();
 					spinnerAdapter.notifyDataSetChanged();
 				}else{
@@ -315,7 +319,7 @@ public class VideoListActivity extends Activity {
 			}
 		}
 		private void selectAll(){
-			mVideoController.addAllVideo();
+			mVideoController.addAllVideotoFilteList();
 			mVideoListAdapter.notifyDataSetChanged();
 		}
 		private void removeAll(){

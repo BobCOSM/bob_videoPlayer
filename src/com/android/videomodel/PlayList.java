@@ -12,7 +12,7 @@ public class PlayList {
 	public boolean isEditMode = false;
 	
 	private VideoInfo currentPlayInfo = null;
-	private int currentIndex = 0;
+	private int currentIndex = -1;
 	
 	public ArrayList<VideoInfo> getPlayListVideos(){
 		return playListVideos;
@@ -67,10 +67,15 @@ public class PlayList {
 	public boolean setPlayState(int position){
 		boolean res = false;
 		VideoInfo videoInfo = null;
-		videoInfo = videos.get(position);
+		resetLastVideoInfo();
+		if(position < 0 ){
+			return res;
+		}
+		videoInfo = playListVideos.get(position);
 		if(videoInfo != null){
 			videoInfo.isPlaying = true;
-			currentPlayInfo = videoInfo;
+			videoInfo.isSelected = true;
+			currentIndex = position;
 			res = true;
 		}
 		return res;
@@ -78,10 +83,14 @@ public class PlayList {
 	
 	public boolean setPlayState(String videoPath){
 		boolean res = false;
-		for(VideoInfo videoInfo : videos){
+		resetLastVideoInfo();
+		if(videoPath == null || "".equals(videoPath)){
+			return res;
+		}
+		for(VideoInfo videoInfo : playListVideos){
 			if(videoInfo.path.equals(videoPath)){
 				videoInfo.isPlaying = true;
-				currentPlayInfo = videoInfo;
+				currentIndex = playListVideos.indexOf(videoInfo);
 				res = true;
 			}
 		}
@@ -90,11 +99,34 @@ public class PlayList {
 	
 	public VideoInfo getNextVideo(){
 		VideoInfo videoInfo = null;
+		if(currentIndex < playListVideos.size() - 1){
+			videoInfo = playListVideos.get(currentIndex + 1);
+		}else{
+			videoInfo = playListVideos.get(0);
+		}
+		return videoInfo;
+	}
+
+	public VideoInfo getPrevVideo(){
+		VideoInfo videoInfo = null;
+		if(currentIndex > 0){
+			videoInfo = playListVideos.get(currentIndex - 1);
+		}else{
+			videoInfo = playListVideos.get(playListVideos.size() -1);
+		}
 		return videoInfo;
 	}
 	
-	public VideoInfo getPrevVideo(){
-		VideoInfo videoInfo = null;
-		return videoInfo;
+	private void resetLastVideoInfo(){
+		if(currentIndex < 0){
+			return;
+		}
+		VideoInfo videoInfo = playListVideos.get(currentIndex);
+		videoInfo.isPlaying = false;
+		videoInfo.isSelected = false;
+	}
+	
+	public int getCurrentPosition(){
+		return currentIndex;
 	}
 }

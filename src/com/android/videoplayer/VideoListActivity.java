@@ -116,6 +116,13 @@ public class VideoListActivity extends Activity {
 		setItemClicked();
 		initController();
 	}
+	
+	@Override
+	protected void onStart(){
+//		initController();
+		super.onStart();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
@@ -151,10 +158,6 @@ public class VideoListActivity extends Activity {
 		mVideoController.setAppContext(mAppContext);
 		mVideoController.setListHandler(mHandler);
 		setVideoListViewAdapter();
-//		Log.d(TAG,"maxd------ mVideoListAdapter " + mVideoListAdapter.toString());
-//		Log.d(TAG,"maxd------ mVideoListView " + mVideoListView);
-//		Log.d(TAG,"maxd------ mVideoController " + mVideoController);
-//		Log.d(TAG,"maxd------ mVideos :" + mVideoController.getVideos());
 		Intent intent = getIntent();
 		if(intent == null || !intent.getBooleanExtra(VideoPlayActivity.IS_FROM_PLAY_ACTIVITY, false)){
 			mVideoController.loadVideoList();
@@ -194,16 +197,13 @@ public class VideoListActivity extends Activity {
 	}
 	
 	private void setItemClicked(){
-		int position = mVideoController.getCurrentPosition();
-		if( position >= 0){
-			mVideoListView.setSelection(position);
-		}
 		mVideoListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+//				view.setSelected(true);
 				if(mVideoController.isDeleteMode()){
 					mVideoController.selectVideoToFilteList(mVideoListAdapter.getItem(position));
 					mVideoListAdapter.notifyDataSetChanged();
@@ -211,6 +211,8 @@ public class VideoListActivity extends Activity {
 				}else{
 					String videoPath = mVideoListAdapter.getItemPath(position);
 					Log.d(TAG,"videoPath :" + videoPath);
+					mVideoController.setPlayState(position);
+					mVideoListAdapter.notifyDataSetChanged();
 					mVideoController.startPlayVideoByPath(VideoListActivity.this, videoPath);
 				}
 			}

@@ -90,6 +90,7 @@ public class PlayList {
 		for(VideoInfo videoInfo : playListVideos){
 			if(videoInfo.path.equals(videoPath)){
 				videoInfo.isPlaying = true;
+				videoInfo.isSelected = true;
 				currentIndex = playListVideos.indexOf(videoInfo);
 				res = true;
 			}
@@ -118,7 +119,7 @@ public class PlayList {
 	}
 	
 	private void resetLastVideoInfo(){
-		if(currentIndex < 0){
+		if(currentIndex < 0 || currentIndex >= playListVideos.size()){
 			return;
 		}
 		VideoInfo videoInfo = playListVideos.get(currentIndex);

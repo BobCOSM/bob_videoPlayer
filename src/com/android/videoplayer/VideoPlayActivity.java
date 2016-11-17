@@ -103,7 +103,7 @@ public class VideoPlayActivity extends Activity {
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(new surfaceCallback());
 		initController();
-		initMediaPlayer();
+//		initMediaPlayer();
 		mTimer = new Timer();
 		mTimer.schedule(new VideoProgressTimer(), 0, 1000);
 		Log.d(TAG,"getIntent.getData : " + getIntent().getData());
@@ -135,6 +135,7 @@ public class VideoPlayActivity extends Activity {
 	}
 	
 	private void initMediaPlayer(){
+		isError = false;
 		if(mMediaPlayer == null){
 			mMediaPlayer = new MediaPlayer();
 		}
@@ -193,6 +194,7 @@ public class VideoPlayActivity extends Activity {
 				mMediaPlayer.seekTo(mCurrentPosition);
 				mediaPause();
 				removeSharePref();
+				mediaNext();
 			}
 		});
 	}
@@ -347,9 +349,9 @@ public class VideoPlayActivity extends Activity {
 	}
 	
 	public void videoListButtonClicked(View view){
-		Intent intent = new Intent(VideoPlayActivity.this,VideoListActivity.class);
-		intent.putExtra(IS_FROM_PLAY_ACTIVITY, true);
-		startActivity(intent);
+//		Intent intent = new Intent(VideoPlayActivity.this,VideoListActivity.class);
+//		intent.putExtra(IS_FROM_PLAY_ACTIVITY, true);
+//		startActivity(intent);
 	}
 	
 	public void fullScreenButtonClicked(View view){
@@ -361,6 +363,7 @@ public class VideoPlayActivity extends Activity {
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			// TODO Auto-generated method stub
+			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | 8);
 			Log.d(TAG,"serfaceCreated");
 			playVideo();
 		}

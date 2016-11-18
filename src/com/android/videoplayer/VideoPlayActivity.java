@@ -352,6 +352,7 @@ public class VideoPlayActivity extends Activity {
 //		Intent intent = new Intent(VideoPlayActivity.this,VideoListActivity.class);
 //		intent.putExtra(IS_FROM_PLAY_ACTIVITY, true);
 //		startActivity(intent);
+		this.finish();
 	}
 	
 	public void fullScreenButtonClicked(View view){

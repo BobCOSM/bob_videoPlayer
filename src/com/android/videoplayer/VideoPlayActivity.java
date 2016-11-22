@@ -1,14 +1,11 @@
 package com.android.videoplayer;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.android.videocontroler.VideoController;
 
-import android.animation.TimeAnimator;
-import android.animation.TimeAnimator.TimeListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,10 +18,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -37,11 +39,16 @@ public class VideoPlayActivity extends Activity {
 	
 	private VideoController mVideoController = null;
 	
+	private Window mWindow = null;
 	private MediaPlayer mMediaPlayer = null;
-	private SurfaceView mSurfaceView = null;
 	private SurfaceHolder mSurfaceHolder = null;
+
+	private SurfaceView mSurfaceView = null;
 	private SeekBar mVideoProgress = null;
 	private ImageButton mPlayButton = null;
+	private View mPlayTopLayout = null;
+	private View mPlayButtomLayout = null;
+	
 	
 	private int mLastPlayPosition = 0;
 	private String mLastPlayVideoPath = "";
@@ -57,10 +64,10 @@ public class VideoPlayActivity extends Activity {
 	private final int SUPPORT_ERROR = 0x01;
 	private final int DEVICE_ERROR = 0x02;
 	private final int TIME_TASK_UPDATE_PROGRESS = 0x03;
-	
 	private boolean mIsFromExternalApp = false;
 	
 	private boolean isError = false;
+	private boolean isFullScreen = false;
 	
 	private VideoProgressTimer mVideoProgressTimer = null;
 	private Timer mTimer = null;
@@ -98,10 +105,14 @@ public class VideoPlayActivity extends Activity {
 		requestAudioFouse();
 		mPlayButton = (ImageButton)findViewById(R.id.play_button);
 		mVideoProgress = (SeekBar)findViewById(R.id.video_progress);
+		mPlayTopLayout = findViewById(R.id.player_top_layout);
+		mPlayButtomLayout = findViewById(R.id.player_buttom_layout);
 		mVideoProgress.setOnSeekBarChangeListener(new VideoProgressListener());
 		mSurfaceView = (SurfaceView)findViewById(R.id.surface_view);
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(new surfaceCallback());
+		mWindow = getWindow();
+		
 		initController();
 //		initMediaPlayer();
 		mTimer = new Timer();
@@ -145,6 +156,44 @@ public class VideoPlayActivity extends Activity {
 		requestAudioFouse();
 	}
 	
+	private void setVideoWindow(){
+		int width = mMediaPlayer.getVideoWidth();
+		int height = mMediaPlayer.getVideoHeight();
+		if(width == 0 || height == 0){
+			return;
+		}
+		LayoutParams lp = (LayoutParams) mSurfaceView.getLayoutParams();
+	}
+	
+	private void scaleScreen(){
+		int width = 0;
+		int height = 0;
+		float ratio = 0;
+        int vWidth = mMediaPlayer.getVideoWidth();
+        int vHeight = mMediaPlayer.getVideoHeight();
+        View playView = findViewById(R.id.root_view);
+        int lw = playView.getWidth();
+        int lh = playView.getHeight();
+        
+        Log.d(TAG,"vWidth: " + vWidth + "  vHeight: " + vHeight);
+        Log.d(TAG,"lw: " + lw + "  lh: " + lh);
+        
+        if((vWidth/vHeight) > (lw/lh)){
+        	width = lw;
+        	ratio = (float)lw/vWidth;
+        	height = (int)(vHeight * ratio);
+        } else{
+        	height = lh;
+        	ratio = (float)lh/vHeight;
+        	width = (int)(vWidth * ratio);
+        }
+        Log.d(TAG,"ratio: " + ratio);
+        Log.d(TAG,"width: " + width + "  height: " + height);
+        RelativeLayout.LayoutParams lp= new RelativeLayout.LayoutParams(width, height);
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        mSurfaceView.setLayoutParams(lp);
+	}
+	
 	private void setMediaPlayerListener(){
 		mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 			@Override
@@ -152,6 +201,9 @@ public class VideoPlayActivity extends Activity {
 				// TODO Auto-generated method stub
 				mVideoController.setPlayState(mPlayPath);
 				mVideoProgress.setMax(mMediaPlayer.getDuration());
+				mSurfaceHolder.setFixedSize(mMediaPlayer.getVideoWidth(),
+                        mMediaPlayer.getVideoHeight());
+				scaleScreen();
 				String lastVideoPath = getLastPath();
 				if(mPlayPath.equals(lastVideoPath)){
 					mLastPlayPosition = getLastPosition();
@@ -277,7 +329,6 @@ public class VideoPlayActivity extends Activity {
 	private void mediaPrevious(){	//播放上一个
 		mediaStop();
 		playVideo(mVideoController.getPrevVideoPath());
-		
 	}
 
 	private void playCurrentVideo(){
@@ -356,7 +407,38 @@ public class VideoPlayActivity extends Activity {
 	}
 	
 	public void fullScreenButtonClicked(View view){
-		
+		fullScreen();
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event){
+		switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			if(isFullScreen){
+				showTopAndButtomBar();
+			}else{
+				fullScreen();
+			}
+			break;
+		}
+		return super.onTouchEvent(event);
+	}
+	
+	private void fullScreen(){
+		hideNaviBar();
+		mPlayButtomLayout.setVisibility(View.GONE);
+		mPlayTopLayout.setVisibility(View.GONE);
+		isFullScreen = true;
+	}
+	
+	private void showTopAndButtomBar(){
+		mPlayButtomLayout.setVisibility(View.VISIBLE);
+		mPlayTopLayout.setVisibility(View.VISIBLE);
+		isFullScreen = false;
+	}
+	
+	private void hideNaviBar(){
+		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | 8);
 	}
 	
 	class surfaceCallback implements SurfaceHolder.Callback{
@@ -364,7 +446,7 @@ public class VideoPlayActivity extends Activity {
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			// TODO Auto-generated method stub
-			getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | 8);
+			hideNaviBar();
 			Log.d(TAG,"serfaceCreated");
 			playVideo();
 		}

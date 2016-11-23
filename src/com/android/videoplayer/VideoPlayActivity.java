@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.android.videocontroler.VideoController;
+import com.android.videomodel.VideoListAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,14 +19,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -35,10 +40,8 @@ public class VideoPlayActivity extends Activity {
 	private final String VIDEO_PATH = "video_path";
 	private final String VIDEO_POSITION = "video_position";
 	
-	public static final String IS_FROM_PLAY_ACTIVITY = "is_from_play_activity"; 
-	
+	public static final String IS_FROM_PLAY_ACTIVITY = "is_from_play_activity";
 	private VideoController mVideoController = null;
-	
 	private Window mWindow = null;
 	private MediaPlayer mMediaPlayer = null;
 	private SurfaceHolder mSurfaceHolder = null;
@@ -48,7 +51,8 @@ public class VideoPlayActivity extends Activity {
 	private ImageButton mPlayButton = null;
 	private View mPlayTopLayout = null;
 	private View mPlayButtomLayout = null;
-	
+	private ListView mListView = null;
+	private VideoListAdapter mVideoListAdapter = null;
 	
 	private int mLastPlayPosition = 0;
 	private String mLastPlayVideoPath = "";
@@ -68,6 +72,7 @@ public class VideoPlayActivity extends Activity {
 	
 	private boolean isError = false;
 	private boolean isFullScreen = false;
+	private boolean isListVisible = false;
 	
 	private VideoProgressTimer mVideoProgressTimer = null;
 	private Timer mTimer = null;
@@ -107,17 +112,26 @@ public class VideoPlayActivity extends Activity {
 		mVideoProgress = (SeekBar)findViewById(R.id.video_progress);
 		mPlayTopLayout = findViewById(R.id.player_top_layout);
 		mPlayButtomLayout = findViewById(R.id.player_buttom_layout);
+		mListView = (ListView)findViewById(R.id.video_list);
+		initController();
+		setVideoListViewAdapter();
+		setListViewItemClickListener();
+		
 		mVideoProgress.setOnSeekBarChangeListener(new VideoProgressListener());
 		mSurfaceView = (SurfaceView)findViewById(R.id.surface_view);
 		mSurfaceHolder = mSurfaceView.getHolder();
 		mSurfaceHolder.addCallback(new surfaceCallback());
 		mWindow = getWindow();
-		
-		initController();
+
 //		initMediaPlayer();
 		mTimer = new Timer();
 		mTimer.schedule(new VideoProgressTimer(), 0, 1000);
 		Log.d(TAG,"getIntent.getData : " + getIntent().getData());
+	}
+	
+	private void setVideoListViewAdapter(){
+		mVideoListAdapter = new VideoListAdapter(getApplicationContext(), mVideoController.getPlayListVideos(),VideoListAdapter.SIMPLE_VIDEO_INFO);
+		mListView.setAdapter(mVideoListAdapter);
 	}
 	
 	@Override
@@ -154,15 +168,6 @@ public class VideoPlayActivity extends Activity {
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		setMediaPlayerListener();
 		requestAudioFouse();
-	}
-	
-	private void setVideoWindow(){
-		int width = mMediaPlayer.getVideoWidth();
-		int height = mMediaPlayer.getVideoHeight();
-		if(width == 0 || height == 0){
-			return;
-		}
-		LayoutParams lp = (LayoutParams) mSurfaceView.getLayoutParams();
 	}
 	
 	private void scaleScreen(){
@@ -403,7 +408,12 @@ public class VideoPlayActivity extends Activity {
 //		Intent intent = new Intent(VideoPlayActivity.this,VideoListActivity.class);
 //		intent.putExtra(IS_FROM_PLAY_ACTIVITY, true);
 //		startActivity(intent);
-		this.finish();
+//		this.finish();
+		if(isListVisible){
+			hideVideoList();
+		} else {
+			showVideoList();
+		}
 	}
 	
 	public void fullScreenButtonClicked(View view){
@@ -414,6 +424,7 @@ public class VideoPlayActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event){
 		switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
+			Log.d(TAG,"touch down");
 			if(isFullScreen){
 				showTopAndButtomBar();
 			}else{
@@ -424,16 +435,80 @@ public class VideoPlayActivity extends Activity {
 		return super.onTouchEvent(event);
 	}
 	
+	private void setListViewItemClickListener(){
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				mVideoController.setPlayState(position);
+				String videoPath = mVideoListAdapter.getItemPath(position);
+				mediaStop();
+				playVideo(videoPath);
+			}
+		});
+	}
+	
 	private void fullScreen(){
 		hideNaviBar();
-		mPlayButtomLayout.setVisibility(View.GONE);
-		mPlayTopLayout.setVisibility(View.GONE);
+		if(isListVisible){
+			hideVideoList();
+		}
+		hideTopLayout();
+		hideButtomLayout();
 		isFullScreen = true;
 	}
 	
-	private void showTopAndButtomBar(){
-		mPlayButtomLayout.setVisibility(View.VISIBLE);
+	private void hideTopLayout(){
+		Animation outAnimation = AnimationUtils.loadAnimation(this, R.anim.top_menu_animation_out);
+		mPlayTopLayout.setAnimation(outAnimation);
+		outAnimation.start();
+		mPlayTopLayout.setVisibility(View.GONE);
+	}
+	
+	private void hideButtomLayout(){
+		Animation outAnimation = AnimationUtils.loadAnimation(this, R.anim.animation_controller_fade_out);
+		mPlayButtomLayout.setAnimation(outAnimation);
+		outAnimation.start();
+		mPlayButtomLayout.setVisibility(View.GONE);
+	}
+	
+	private void showTopLayout(){
+		Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.top_menu_animation_in);
+		mPlayTopLayout.setAnimation(inAnimation);
+		inAnimation.start();
 		mPlayTopLayout.setVisibility(View.VISIBLE);
+	}
+	
+	private void showButtonLayout(){
+		Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.animation_controller_fade_in);
+		mPlayButtomLayout.setAnimation(inAnimation);
+		inAnimation.start();
+		mPlayButtomLayout.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideVideoList(){
+		Animation outAnimation = AnimationUtils.loadAnimation(this, R.anim.animation_videolist_out);
+		mListView.setAnimation(outAnimation);
+		outAnimation.start();
+		mVideoListAdapter.notifyDataSetChanged();
+		mListView.setVisibility(View.GONE);
+		isListVisible = false;
+	}
+	
+	private void showVideoList(){
+		Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.animation_videolist_in);
+		mListView.setAnimation(inAnimation);
+		inAnimation.start();
+		mVideoListAdapter.notifyDataSetChanged();
+		mListView.setVisibility(View.VISIBLE);
+		isListVisible = true;
+	}
+	
+	private void showTopAndButtomBar(){
+		showTopLayout();
+		showButtonLayout();
 		isFullScreen = false;
 	}
 	

@@ -4,6 +4,8 @@
     <color name="video_list_cell_sel_bg">#999999</color>
     <color name="video_list_cell_nor_bg">#ffffff</color>
     
+    <color name="video_list_cell_at_player_text_color">#aabbbb</color>
+    
     <color name="trans">#00000000</color>
     <color name="white">#ffffff</color>
 </resources>

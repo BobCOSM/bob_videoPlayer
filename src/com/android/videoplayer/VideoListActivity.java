@@ -165,7 +165,7 @@ public class VideoListActivity extends Activity {
 	}
 	
 	private void setVideoListViewAdapter(){
-		mVideoListAdapter = new VideoListAdapter(mAppContext, mVideoController.getPlayListVideos());
+		mVideoListAdapter = new VideoListAdapter(mAppContext, mVideoController.getPlayListVideos(),VideoListAdapter.WHOLE_VIDEO_INFO);
 		mVideoListView.setAdapter(mVideoListAdapter);
 	}
 	

@@ -57,13 +57,13 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="18dp"
             android:layout_marginTop="8dp"
-            android:layout_toLeftOf="@+id/video_list"
+            android:layout_toLeftOf="@+id/video_list_controller"
             android:background="@drawable/full_screen_btn_selector"
             android:contentDescription="@string/full_screen_description"
             android:onClick="fullScreenButtonClicked" />
 
         <ImageButton
-            android:id="@+id/video_list"
+            android:id="@+id/video_list_controller"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -177,4 +177,14 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+    
+    <ListView 
+        android:id="@+id/video_list"
+        android:layout_below="@id/player_top_layout"
+        android:layout_above="@id/player_buttom_layout"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/player_title_bg"
+        android:visibility="gone" />
 </RelativeLayout>

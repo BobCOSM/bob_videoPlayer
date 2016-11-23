@@ -23,4 +23,11 @@
         <item name="android:singleLine">true</item>
         <item name="android:gravity">center_vertical</item>
     </style>
+    
+    <style name="video_list_cell_at_player_theme" parent="AppBaseTheme">
+        <item name="android:textColor">@color/video_list_cell_at_player_text_color</item> 
+        <item name="android:textSize">@dimen/video_list_cell_at_player_text_size</item> 
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
 </resources>

@@ -2,6 +2,7 @@
 <resources>
     <color name="video_list_cell_text_color">#000000</color>
     <color name="video_list_cell_sel_bg">#999999</color>
+    <color name="video_list_cell_pre_bg">#666666</color>
     <color name="video_list_cell_nor_bg">#ffffff</color>
     
     <color name="video_list_cell_at_player_text_color">#aabbbb</color>

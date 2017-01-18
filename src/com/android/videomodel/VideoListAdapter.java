@@ -124,8 +124,6 @@ public class VideoListAdapter extends BaseAdapter {
 			viewHolder.videoCheck.setImageResource( 
 					videoInfo.isChecked() ? R.drawable.check_box_checked : R.drawable.check_box_normal);
 			
-			convertView.setBackgroundColor(mAppContext.getResources().getColor(
-					videoInfo.isSelected ? R.color.video_list_cell_sel_bg : R.color.video_list_cell_nor_bg));	
 		}else if(mType == SIMPLE_VIDEO_INFO){
 			Log.d(TAG,"videoHolder : " + viewHolder);
 			Log.d(TAG,"videoTitle : " + viewHolder.videoTitle);

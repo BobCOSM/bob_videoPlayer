@@ -60,7 +60,7 @@
             android:layout_toLeftOf="@+id/video_list_controller"
             android:background="@drawable/full_screen_btn_selector"
             android:contentDescription="@string/full_screen_description"
-            android:onClick="fullScreenButtonClicked" />
+            android:onClick="onSetLandScape" />
 
         <ImageButton
             android:id="@+id/video_list_controller"

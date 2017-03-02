@@ -39,4 +39,8 @@
         <item>Select all</item>
         <item>Cancel selection</item>
     </array>
+    
+    <string name="video_fun"> video </string>
+    <string name="list_test"> LIST </string>
 </resources>
+

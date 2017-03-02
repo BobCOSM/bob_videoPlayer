@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -104,6 +105,10 @@ public class VideoListActivity extends Activity {
 			Log.d(TAG, "maxd ---- ++----- video list count: " + mVideoController.getPlayListSize());
 		}
 	};
+	
+	private void playDefault(){
+		
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +203,7 @@ public class VideoListActivity extends Activity {
 	
 	private void setItemClicked(){
 		mVideoListView.setOnItemClickListener(new OnItemClickListener() {
-
+			private int lastItemPosition = -1;
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -212,7 +217,8 @@ public class VideoListActivity extends Activity {
 					String videoPath = mVideoListAdapter.getItemPath(position);
 					Log.d(TAG,"videoPath :" + videoPath);
 					mVideoController.setPlayState(position);
-					mVideoListAdapter.notifyDataSetChanged();
+					view.setSelected(true);
+					lastItemPosition = position;
 					mVideoController.startPlayVideoByPath(VideoListActivity.this, videoPath);
 				}
 			}
@@ -328,5 +334,17 @@ public class VideoListActivity extends Activity {
 			mVideoController.removeAll();
 			mVideoListAdapter.notifyDataSetChanged();
 		}
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		switch(keyCode){
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			
+			break;
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			
+			break;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

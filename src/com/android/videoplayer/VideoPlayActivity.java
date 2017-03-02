@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
@@ -168,6 +170,27 @@ public class VideoPlayActivity extends Activity {
 		mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		setMediaPlayerListener();
 		requestAudioFouse();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		// TODO Auto-generated method stub
+		super.onConfigurationChanged(newConfig);
+	}
+	
+	public void onVideoSizeChanged(MediaPlayer mp,int with,int height){
+		
+	}
+	
+	public void onSetLandScape(View view){
+		int MediaOrientation = getRequestedOrientation();
+		Log.d(TAG," MediaOrientation: " + MediaOrientation);
+		if(MediaOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		}else{
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		}
+		scaleScreen();
 	}
 	
 	private void scaleScreen(){
